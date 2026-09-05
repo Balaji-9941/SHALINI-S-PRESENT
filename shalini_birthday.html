@@ -1,0 +1,790 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>A Little Gift</title>
+    <style>
+      :root {
+        --bg: #100d18;
+        --bg2: #171225;
+        --card: rgba(255, 255, 255, 0.075);
+        --text: #fff8f4;
+        --muted: #cfc2cc;
+        --pink: #ff9fbe;
+        --rose: #e8799f;
+        --gold: #ffd89b;
+        --line: rgba(255, 255, 255, 0.13);
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: Georgia, "Times New Roman", serif;
+        color: var(--text);
+        background:
+          radial-gradient(
+            circle at 15% 15%,
+            rgba(232, 121, 159, 0.16),
+            transparent 30%
+          ),
+          radial-gradient(
+            circle at 85% 40%,
+            rgba(255, 216, 155, 0.1),
+            transparent 28%
+          ),
+          linear-gradient(135deg, var(--bg), var(--bg2));
+        overflow-x: hidden;
+      }
+      button {
+        font: inherit;
+      }
+      #stars {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        opacity: 0.65;
+      }
+      section {
+        position: relative;
+        z-index: 1;
+        min-height: 100vh;
+        padding: 90px 7vw;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .container {
+        width: min(1120px, 100%);
+      }
+      .kicker {
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        color: var(--gold);
+        font:
+          600 12px Arial,
+          sans-serif;
+      }
+      h1 {
+        font-size: clamp(60px, 12vw, 150px);
+        line-height: 0.82;
+        letter-spacing: -5px;
+      }
+      h2 {
+        font-size: clamp(38px, 6vw, 72px);
+        line-height: 1;
+        margin: 14px 0 20px;
+      }
+      h3 {
+        font-size: 26px;
+      }
+      p {
+        color: var(--muted);
+        line-height: 1.75;
+        font-size: 17px;
+      }
+      .center {
+        text-align: center;
+      }
+
+      /* opening */
+      #home {
+        min-height: 100vh;
+        text-align: center;
+        overflow: hidden;
+      }
+      .home-inner {
+        animation: rise 1.4s ease both;
+      }
+      .home-sub {
+        margin: 28px auto 34px;
+        max-width: 620px;
+        font-size: 18px;
+      }
+      .date {
+        font:
+          600 13px Arial,
+          sans-serif;
+        letter-spacing: 3px;
+        color: var(--pink);
+      }
+      .cta {
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        color: #fff;
+        background: rgba(255, 255, 255, 0.08);
+        padding: 15px 25px;
+        border-radius: 999px;
+        cursor: pointer;
+        backdrop-filter: blur(12px);
+        transition: 0.3s;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.18);
+      }
+      .cta:hover {
+        transform: translateY(-3px);
+        background: rgba(255, 159, 190, 0.16);
+      }
+      .scroll {
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        font:
+          11px Arial,
+          sans-serif;
+        letter-spacing: 2px;
+        color: #aaa;
+      }
+
+      /* portrait */
+      .portrait-layout {
+        display: grid;
+        grid-template-columns: 1fr 1.1fr;
+        gap: 70px;
+        align-items: center;
+      }
+      .portrait-frame {
+        width: min(450px, 100%);
+        aspect-ratio: 4/5;
+        margin: auto;
+        border-radius: 230px 230px 28px 28px;
+        padding: 12px;
+        background: linear-gradient(
+          145deg,
+          rgba(255, 216, 155, 0.7),
+          rgba(255, 159, 190, 0.35)
+        );
+        box-shadow: 0 30px 100px rgba(0, 0, 0, 0.4);
+        position: relative;
+      }
+      .portrait-frame img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 220px 220px 20px 20px;
+        display: block;
+        filter: saturate(0.75) contrast(1.03);
+      }
+      .portrait-note {
+        position: absolute;
+        background: #fff9ed;
+        color: #46323c;
+        padding: 15px 18px;
+        max-width: 210px;
+        box-shadow: 0 12px 30px #0005;
+        font-size: 15px;
+        line-height: 1.4;
+      }
+      .note1 {
+        top: 5%;
+        right: -70px;
+        transform: rotate(5deg);
+      }
+      .note2 {
+        bottom: 14%;
+        left: -70px;
+        transform: rotate(-6deg);
+      }
+      .portrait-copy {
+        max-width: 520px;
+      }
+      .quote {
+        font-size: 29px;
+        line-height: 1.35;
+        color: #fff;
+        margin: 25px 0;
+      }
+
+      /* messages */
+      .message-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        margin-top: 45px;
+      }
+      .envelope {
+        min-height: 230px;
+        padding: 28px;
+        border: 1px solid var(--line);
+        background: var(--card);
+        border-radius: 22px;
+        backdrop-filter: blur(14px);
+        cursor: pointer;
+        transition: 0.35s;
+        position: relative;
+        overflow: hidden;
+      }
+      .envelope:hover {
+        transform: translateY(-8px);
+        border-color: rgba(255, 159, 190, 0.5);
+      }
+      .envelope .from {
+        color: var(--pink);
+        font:
+          700 12px Arial,
+          sans-serif;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+      }
+      .envelope .hidden-msg {
+        display: none;
+        margin-top: 20px;
+      }
+      .envelope.open .hidden-msg {
+        display: block;
+      }
+      .envelope.open .teaser {
+        display: none;
+      }
+      .tap {
+        position: absolute;
+        bottom: 20px;
+        right: 22px;
+        color: #999;
+        font:
+          11px Arial,
+          sans-serif;
+      }
+
+      /* scrapbook */
+      .scrapbook {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 28px;
+        margin-top: 45px;
+      }
+      .polaroid {
+        background: #f8f0e8;
+        color: #33252c;
+        padding: 12px 12px 38px;
+        box-shadow: 0 20px 45px #0005;
+        transition: 0.4s;
+      }
+      .polaroid:nth-child(1) {
+        transform: rotate(-4deg);
+      }
+      .polaroid:nth-child(2) {
+        transform: rotate(3deg);
+        margin-top: 25px;
+      }
+      .polaroid:nth-child(3) {
+        transform: rotate(-2deg);
+      }
+      .polaroid:nth-child(4) {
+        transform: rotate(4deg);
+        margin-top: -10px;
+      }
+      .polaroid img {
+        width: 100%;
+        aspect-ratio: 4/3;
+        object-fit: cover;
+        background: #d7c8ce;
+        display: block;
+      }
+      .polaroid figcaption {
+        padding: 15px 5px 0;
+        font-size: 17px;
+      }
+
+      /* things */
+      .things {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 15px;
+        margin-top: 45px;
+      }
+      .thing {
+        padding: 28px 15px;
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.045);
+        transition: 0.3s;
+      }
+      .thing:hover {
+        transform: translateY(-7px);
+        background: rgba(255, 159, 190, 0.09);
+      }
+      .emoji {
+        font-size: 35px;
+        display: block;
+        margin-bottom: 15px;
+      }
+      .thing span:last-child {
+        font-size: 15px;
+      }
+
+      /* distance */
+      .distance-box {
+        max-width: 850px;
+        margin: auto;
+        text-align: center;
+      }
+      .distance-box .big {
+        font-size: clamp(38px, 7vw, 82px);
+        line-height: 1.08;
+        color: #fff;
+        margin: 30px 0;
+      }
+      .distance-box .big em {
+        color: var(--pink);
+        font-style: normal;
+      }
+
+      /* gift */
+      .gift-area {
+        text-align: center;
+      }
+      .gift {
+        width: 180px;
+        height: 150px;
+        margin: 45px auto 30px;
+        position: relative;
+        cursor: pointer;
+        transition: 0.4s;
+      }
+      .gift:hover {
+        transform: translateY(-8px);
+      }
+      .box {
+        position: absolute;
+        bottom: 0;
+        width: 180px;
+        height: 115px;
+        background: linear-gradient(135deg, #c75d82, #e990aa);
+        border-radius: 8px;
+        box-shadow: 0 25px 60px #0006;
+      }
+      .lid {
+        position: absolute;
+        top: 15px;
+        left: -8px;
+        width: 196px;
+        height: 42px;
+        background: #ed9bb3;
+        border-radius: 8px;
+        z-index: 2;
+      }
+      .ribbon-v {
+        position: absolute;
+        left: 76px;
+        top: 0;
+        width: 28px;
+        height: 150px;
+        background: #ffd89b;
+        z-index: 3;
+      }
+      .ribbon-h {
+        position: absolute;
+        left: -8px;
+        top: 22px;
+        width: 196px;
+        height: 24px;
+        background: #ffd89b;
+        z-index: 4;
+      }
+      .bow {
+        position: absolute;
+        top: -18px;
+        left: 65px;
+        width: 60px;
+        height: 35px;
+        z-index: 5;
+      }
+      .bow:before,
+      .bow:after {
+        content: "";
+        position: absolute;
+        width: 35px;
+        height: 25px;
+        border: 9px solid #ffd89b;
+        border-radius: 50%;
+      }
+      .bow:before {
+        left: -10px;
+        transform: rotate(25deg);
+      }
+      .bow:after {
+        right: -10px;
+        transform: rotate(-25deg);
+      }
+      .final {
+        display: none;
+        animation: fade 1.3s ease;
+      }
+      .final.show {
+        display: block;
+      }
+      .final h2 {
+        color: var(--pink);
+      }
+      .signature {
+        margin-top: 30px;
+        color: #ddd;
+        font-style: italic;
+      }
+
+      /* modal music */
+      .music {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        z-index: 20;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        border: 1px solid var(--line);
+        background: #ffffff12;
+        color: #fff;
+        cursor: pointer;
+        backdrop-filter: blur(12px);
+      }
+      .footer {
+        text-align: center;
+        padding: 40px 20px 60px;
+        color: #817781;
+        font:
+          11px Arial,
+          sans-serif;
+        letter-spacing: 1px;
+        position: relative;
+        z-index: 1;
+      }
+
+      @keyframes rise {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      @keyframes fade {
+        from {
+          opacity: 0;
+          transform: scale(0.96);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      @media (max-width: 850px) {
+        section {
+          padding: 75px 6vw;
+        }
+        .portrait-layout {
+          grid-template-columns: 1fr;
+          gap: 50px;
+        }
+        .portrait-copy {
+          text-align: center;
+          margin: auto;
+        }
+        .note1 {
+          right: -10px;
+        }
+        .note2 {
+          left: -10px;
+        }
+        .message-grid,
+        .scrapbook {
+          grid-template-columns: 1fr;
+        }
+        .things {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .polaroid {
+          max-width: 420px;
+          margin: 20px auto !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="stars"></canvas>
+
+    <section id="home">
+      <div class="home-inner">
+        <div class="date">06 • 09 • 2026</div>
+        <div class="kicker" style="margin-top: 25px">
+          A little place on the internet
+        </div>
+        <h1 style="margin-top: 28px">Shalu</h1>
+        <p class="home-sub">
+          Some gifts can be wrapped. Some can be held. And some are simply made
+          with a little time, a lot of memories, and even more love.
+        </p>
+        <button
+          class="cta"
+          onclick="
+            document
+              .querySelector('#portrait')
+              .scrollIntoView({ behavior: 'smooth' })
+          "
+        >
+          Open your surprise ✨
+        </button>
+      </div>
+      <div class="scroll">SCROLL SLOWLY ↓</div>
+    </section>
+
+    <section id="portrait">
+      <div class="container portrait-layout">
+        <div class="portrait-frame">
+          <!-- PLACEHOLDER: replace with Shalini's portrait -->
+          <img src="SHALINI !.png" alt="Shalini portrait placeholder" />
+          <div class="portrait-note note1">
+            “Some people become memories. Some become a part of them.” ♡
+          </div>
+          <div class="portrait-note note2">Blessed to be her friend</div>
+        </div>
+        <div class="portrait-copy">
+          <div class="kicker">The girl this page is for</div>
+          <div class="quote">
+            ““Some people leave behind memories. Some people become the
+            memory.”.”
+          </div>
+          <p>
+            If I could gather every little thing that makes you special—the
+            laughter, the kindness, the chaos, the warmth, and all the moments
+            that somehow became unforgettable—and put them together in one
+            place…
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="messages">
+      <div class="container">
+        <div class="center">
+          <div class="kicker">From your people</div>
+          <h2>Words for Shalini</h2>
+          <p>
+            Tap each little card. Every message is a placeholder for something
+            real from your friends.
+          </p>
+        </div>
+        <div class="message-grid">
+          <article class="envelope" onclick="this.classList.toggle('open')">
+            <div class="from">From a friend ♡</div>
+            <h3 class="teaser" style="margin-top: 25px">
+              A little message is waiting...
+            </h3>
+            <p class="hidden-msg">
+              “You have this beautiful way of making people feel comfortable
+              just by being yourself. Never lose that part of you.”
+            </p>
+            <span class="tap">TAP TO OPEN</span>
+          </article>
+          <article class="envelope" onclick="this.classList.toggle('open')">
+            <div class="from">From a friend ✨</div>
+            <h3 class="teaser" style="margin-top: 25px">
+              Someone wanted to tell you...
+            </h3>
+            <p class="hidden-msg">
+              “I hope this year gives you reasons to laugh until your stomach
+              hurts, dream without limits, and remember how loved you are.”
+            </p>
+            <span class="tap">TAP TO OPEN</span>
+          </article>
+          <article class="envelope" onclick="this.classList.toggle('open')">
+            <div class="from">From a friend 🌷</div>
+            <h3 class="teaser" style="margin-top: 25px">
+              There's something inside...
+            </h3>
+            <p class="hidden-msg">
+              “Stay exactly as wonderfully crazy, kind and genuine as you are.
+              The world is better with people like you in it.”
+            </p>
+            <span class="tap">TAP TO OPEN</span>
+          </article>
+          <article class="envelope" onclick="this.classList.toggle('open')">
+            <div class="from">From a friend 😂</div>
+            <h3 class="teaser" style="margin-top: 25px">
+              Okay, this one may roast you...
+            </h3>
+            <p class="hidden-msg">
+              “Another year older. Somehow still not any wiser. But honestly,
+              that's part of why we like you.”
+            </p>
+            <span class="tap">TAP TO OPEN</span>
+          </article>
+          <article class="envelope" onclick="this.classList.toggle('open')">
+            <div class="from">From a friend 🤍</div>
+            <h3 class="teaser" style="margin-top: 25px">A quiet one...</h3>
+            <p class="hidden-msg">
+              “Thank you for all the little things you probably don't even
+              realise you do. They mean more than you know.”
+            </p>
+            <span class="tap">TAP TO OPEN</span>
+          </article>
+          <article class="envelope" onclick="this.classList.toggle('open')">
+            <div class="from">From someone special</div>
+            <h3 class="teaser" style="margin-top: 25px">One last message...</h3>
+            <p class="hidden-msg">
+              “Wherever life takes you next, I hope you always remember that
+              there are people cheering for you from every direction.”
+            </p>
+            <span class="tap">TAP TO OPEN</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="memories">
+      <div class="container">
+        <div class="center">
+          <div class="kicker">Little moments</div>
+          <h2>Our scrapbook</h2>
+          <p>
+            Placeholder photographs for now. Replace them with your real
+            memories later.
+          </p>
+        </div>
+        <div class="scrapbook">
+          <figure class="polaroid">
+            <img src="SHALINI 2.jpeg" alt="Memory placeholder" />
+            <figcaption>“Our First Day...”</figcaption>
+          </figure>
+          <figure class="polaroid">
+            <img src="SHALINI 3.jpeg" alt="Memory placeholder" />
+            <figcaption>“The day I realized your true kindness.”</figcaption>
+          </figure>
+          <figure class="polaroid">
+            <img src="SHALINI 4.png" alt="Memory placeholder" />
+            <figcaption>“A tiny moment, a huge memory.”</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section id="things">
+      <div class="container">
+        <div class="center">
+          <div class="kicker">Just because</div>
+          <h2>A few things about you</h2>
+          <p>
+            These are intentionally simple placeholders — we can make them
+            deeply personal later.
+          </p>
+        </div>
+        <div class="things">
+          <div class="thing">
+            <span class="emoji">🌸</span><span>Your kindness</span>
+          </div>
+          <div class="thing">
+            <span class="emoji">😂</span><span>Your craziness</span>
+          </div>
+          <div class="thing">
+            <span class="emoji">✨</span><span>Your energy</span>
+          </div>
+          <div class="thing">
+            <span class="emoji">🤍</span><span>Your heart</span>
+          </div>
+          <div class="thing">
+            <span class="emoji">🌙</span><span>Your presence</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="distance">
+      <div class="container distance-box">
+        <div class="kicker">One thing distance can't change</div>
+        <div class="big">
+          If distance disappeared for one day,<br /><em
+            >I'd spend it with you.</em
+          >
+        </div>
+        <p>
+          I'd bring the cake, But you are far from me. We'd laugh about
+          something completely stupid. And for once, there'd be no screen
+          between us.
+        </p>
+        <p style="margin-top: 20px">
+          Until that day comes, this little page will have to carry a tiny piece
+          of that feeling.
+        </p>
+      </div>
+    </section>
+
+    <section id="gift">
+      <div class="container gift-area">
+        <div class="kicker">There's one last thing</div>
+        <h2>Open your gift 🎁</h2>
+        <p>It's not much. But I made it just for you.</p>
+        <div class="gift" onclick="openGift()" aria-label="Open birthday gift">
+          <div class="bow"></div>
+          <div class="lid"></div>
+          <div class="ribbon-h"></div>
+          <div class="box"></div>
+          <div class="ribbon-v"></div>
+        </div>
+        <div class="final" id="final">
+          <h2>Happy Birthday, Shalini! ❤️</h2>
+          <p style="max-width: 650px; margin: auto">
+            I wish I could have handed you a real gift today. I wish I could
+            have written something on paper and watched you open it. But until
+            distance stops being a problem, I made you a little piece of the
+            internet that belongs to you.
+          </p>
+          <p class="signature">
+            With lots of love, laughter and a thousand memories yet to be
+            made.<br /><strong>— Balaji, to you ♡</strong>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">MADE WITH MY LOVE FOR SHALINI • 06.09.2026</div>
+
+    <script>
+      // Gentle star field
+      const canvas = document.getElementById("stars"),
+        ctx = canvas.getContext("2d");
+      let stars = [];
+      function resize() {
+        canvas.width = innerWidth;
+        canvas.height = innerHeight;
+        stars = Array.from({ length: 120 }, () => ({
+          x: Math.random() * innerWidth,
+          y: Math.random() * innerHeight,
+          r: Math.random() * 1.5 + 0.3,
+          a: Math.random(),
+        }));
+      }
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        stars.forEach((s) => {
+          s.a += 0.01;
+          ctx.globalAlpha = 0.25 + 0.35 * Math.abs(Math.sin(s.a));
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fillStyle = "#fff";
+          ctx.fill();
+        });
+        requestAnimationFrame(draw);
+      }
+      addEventListener("resize", resize);
+      resize();
+      draw();
+
+      function openGift() {
+        const gift = document.querySelector(".gift");
+        gift.style.transform = "scale(0.9) rotate(2deg)";
+        setTimeout(() => {
+          gift.style.display = "none";
+          document.getElementById("final").classList.add("show");
+        }, 450);
+      }
+    </script>
+  </body>
+</html>
